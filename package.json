@@ -1,0 +1,14 @@
+{
+  "name": "crimeintel",
+  "version": "1.0.0",
+  "description": "CrimeIntel AI Criminal Intelligence & Analysis Platform",
+  "main": "server.cjs",
+  "scripts": {
+    "start": "node server.cjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.0"
+  }
+}
