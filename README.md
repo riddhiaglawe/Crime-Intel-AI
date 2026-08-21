@@ -33,7 +33,6 @@
 | **Database** | MongoDB Atlas / Cloud Persistence |
 | **AI & NLP** | Google Gemini API (`@google/genai`) |
 | **Browser APIs** | HTML5 Canvas 2D, Web Speech API, MediaStream Camera API, Web Crypto API |
-| **Deployment** | Vercel / Cloud Run |
 
 ---
 
