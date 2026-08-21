@@ -1,9 +1,7 @@
 # 🛡️ CrimeIntel - Next-Gen Police & FIR Crime Intelligence System
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://ais-pre-oti3323xadiz2otidvgnm4-363887121857.asia-southeast1.run.app)
 [![Node.js](https://img.shields.io/badge/Node.js-v18+-green?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
 [![Database](https://img.shields.io/badge/Database-MongoDB_Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/atlas)
-[![AI](https://img.shields.io/badge/AI-Google_Gemini-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 **CrimeIntel** is a modernized, full-stack crime intelligence, digital FIR management, and forensic correlation platform designed for law enforcement departments and citizen portals. Built with cutting-edge graph physics, voice-to-text intelligence, and AI-powered entity extraction, CrimeIntel bridges the gap between public grievance reporting and high-speed criminal investigation.
