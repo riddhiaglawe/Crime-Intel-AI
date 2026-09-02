@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>CrimeIntel AI — AI-Powered Criminal Intelligence &amp; Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      function applyTheme(theme) {
+        var t = theme === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+        if (document.body) document.body.setAttribute('data-theme', t);
+        try { localStorage.setItem('crimeintel-theme', t); } catch(e) {}
+        
+        var toggles = document.querySelectorAll('.theme-toggle-control');
+        toggles.forEach(function(ctrl) {
+          var lightBtn = ctrl.querySelector('[data-set-theme="light"]');
+          var darkBtn = ctrl.querySelector('[data-set-theme="dark"]');
+          if (lightBtn && darkBtn) {
+            if (t === 'dark') {
+              darkBtn.classList.add('active');
+              lightBtn.classList.remove('active');
+            } else {
+              lightBtn.classList.add('active');
+              darkBtn.classList.remove('active');
+            }
+          }
+        });
+        if (typeof window.drawWeb === 'function' && window._currentCase) {
+          try { window.drawWeb(window._currentCase); } catch(err) {}
+        }
+      }
+
+      window.setTheme = applyTheme;
+      window.toggleTheme = function() {
+        var cur = document.documentElement.getAttribute('data-theme') || 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        return next;
+      };
+
+      try {
+        var savedTheme = localStorage.getItem('crimeintel-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } catch(e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<!-- ========== PREMIUM LAW ENFORCEMENT LOGIN & REGISTRATION SCREEN ========== -->
+<div class="login-screen" id="login-screen">
+  <!-- Ambient background glow elements -->
+  <div class="cyber-bg-glow glow-1"></div>
+  <div class="cyber-bg-glow glow-2"></div>
+  <div class="cyber-grid-overlay"></div>
+
+  <div class="login-container">
+    <!-- Top Bar with Theme Toggle -->
+    <div class="login-top-bar">
+      <div class="theme-toggle-control login-theme-toggle" id="loginThemeToggle" title="Toggle Light / Dark Theme">
+        <button type="button" class="theme-btn active" data-set-theme="light" onclick="window.setTheme('light')" aria-label="Light Theme">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <span>Light</span>
+        </button>
+        <button type="button" class="theme-btn" data-set-theme="dark" onclick="window.setTheme('dark')" aria-label="Dark Theme">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Top Branding Header -->
+    <div class="login-top-header">
+      <div class="login-main-logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Shield outline -->
+          <path d="M12 2L3.5 5.8v6.2c0 5.4 3.6 10.5 8.5 11.5 4.9-1 8.5-6.1 8.5-11.5V5.8L12 2z"
+                fill="url(#shieldGrad)" stroke="#3b82f6" stroke-width="1.6" stroke-linejoin="round"/>
+          <!-- Fingerprint / Neural network loops inside -->
+          <path d="M12 7c-2.2 0-4 1.8-4 4v2" stroke="#60a5fa" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M12 7c2.2 0 4 1.8 4 4v1" stroke="#a78bfa" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M9.5 11c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5v3.5" stroke="#93c5fd" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M12 11.5v4" stroke="#c084fc" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="12" cy="18" r="1.2" fill="#60a5fa"/>
+          <circle cx="7.5" cy="15" r="1" fill="#818cf8"/>
+          <circle cx="16.5" cy="15" r="1" fill="#c084fc"/>
+          <line x1="7.5" y1="15" x2="12" y2="18" stroke="#3b82f6" stroke-width="0.8" stroke-dasharray="1.5 1.5"/>
+          <line x1="16.5" y1="15" x2="12" y2="18" stroke="#8b5cf6" stroke-width="0.8" stroke-dasharray="1.5 1.5"/>
+          <defs>
+            <linearGradient id="shieldGrad" x1="3.5" y1="2" x2="20.5" y2="23.5" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#1e3a8a" stop-opacity="0.45"/>
+              <stop offset="1" stop-color="#581c87" stop-opacity="0.25"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h1 class="login-brand-title">CrimeIntel AI</h1>
+      <p class="login-brand-subtitle">AI-Powered Criminal Intelligence &amp; Analysis</p>
+      <div class="login-brand-tagline">Detect • Analyze • Correlate • Solve</div>
+    </div>
+
+    <!-- Responsive Two-Column Authentication Card -->
+    <div class="login-auth-card">
+      <!-- LEFT SIDE: Brand & Security Overview -->
+      <div class="auth-card-left">
+        <div class="left-hero">
+          <div class="left-hero-badge">
+            <span class="pulse-dot"></span>
+            <span>INTELLIGENCE WORKSPACE</span>
+          </div>
+          <h2 class="left-hero-title">Welcome Back</h2>
+          <p class="left-hero-desc">Sign in to access the secure investigation portal.</p>
+        </div>
+
+        <!-- Abstract Investigation Cyber Visual -->
+        <div class="auth-visual-box">
+          <svg viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="intel-graphic">
+            <!-- Grid lines -->
+            <line x1="20" y1="60" x2="260" y2="60" stroke="rgba(96, 165, 250, 0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+            <line x1="140" y1="10" x2="140" y2="110" stroke="rgba(96, 165, 250, 0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+            <!-- Radar scan circle -->
+            <circle cx="140" cy="60" r="45" stroke="rgba(59, 130, 246, 0.3)" stroke-width="1.2"/>
+            <circle cx="140" cy="60" r="25" stroke="rgba(139, 92, 246, 0.35)" stroke-width="1.2"/>
+            <!-- Network Nodes & Connecting correlation vectors -->
+            <line x1="70" y1="35" x2="140" y2="60" stroke="#3b82f6" stroke-width="1.2" stroke-opacity="0.7"/>
+            <line x1="140" y1="60" x2="210" y2="35" stroke="#8b5cf6" stroke-width="1.2" stroke-opacity="0.7"/>
+            <line x1="85" y1="90" x2="140" y2="60" stroke="#3b82f6" stroke-width="1.2" stroke-opacity="0.7"/>
+            <line x1="140" y1="60" x2="195" y2="90" stroke="#8b5cf6" stroke-width="1.2" stroke-opacity="0.7"/>
+            <!-- Nodes -->
+            <circle cx="140" cy="60" r="6" fill="#3b82f6" fill-opacity="0.3" stroke="#60a5fa" stroke-width="2"/>
+            <circle cx="140" cy="60" r="2.5" fill="#ffffff"/>
+            
+            <circle cx="70" cy="35" r="4" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+            <circle cx="210" cy="35" r="4" fill="#4c1d95" stroke="#c084fc" stroke-width="1.5"/>
+            <circle cx="85" cy="90" r="4" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+            <circle cx="195" cy="90" r="4" fill="#4c1d95" stroke="#c084fc" stroke-width="1.5"/>
+            <!-- Labels -->
+            <text x="50" y="24" fill="#94a3b8" font-size="9" font-family="'IBM Plex Mono', monospace">EVID-01</text>
+            <text x="200" y="24" fill="#94a3b8" font-size="9" font-family="'IBM Plex Mono', monospace">SUSP-03</text>
+            <text x="122" y="80" fill="#60a5fa" font-size="9" font-weight="600" font-family="'IBM Plex Mono', monospace">AI MATCH</text>
+          </svg>
+        </div>
+
+        <!-- 4 Key Feature Highlights -->
+        <div class="auth-features-list">
+          <div class="auth-feature-item">
+            <div class="feature-icon">🛡️</div>
+            <div class="feature-text">
+              <div class="feature-title">Secure Investigation</div>
+              <div class="feature-desc">Protected workspace for authorized investigation data.</div>
+            </div>
+          </div>
+
+          <div class="auth-feature-item">
+            <div class="feature-icon">🧠</div>
+            <div class="feature-text">
+              <div class="feature-title">AI-Powered Analysis</div>
+              <div class="feature-desc">Identify patterns, relationships and correlations across investigation data.</div>
+            </div>
+          </div>
+
+          <div class="auth-feature-item">
+            <div class="feature-icon">🔗</div>
+            <div class="feature-text">
+              <div class="feature-title">Evidence Correlation</div>
+              <div class="feature-desc">Connect evidence, cases and persons of interest.</div>
+            </div>
+          </div>
+
+          <div class="auth-feature-item">
+            <div class="feature-icon">📊</div>
+            <div class="feature-text">
+              <div class="feature-title">Smart Intelligence</div>
+              <div class="feature-desc">Generate data-driven insights to support investigation workflows.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Authorization Notice -->
+        <div class="auth-left-footer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span>Authorized Access Only</span>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: Authentication Panel (Sign In / Register) -->
+      <div class="auth-card-right">
+        <!-- Top Security Badge -->
+        <div class="auth-portal-badge">
+          <span class="badge-dot-live"></span>
+          <span>Secure Investigation Portal</span>
+        </div>
+
+        <!-- Alerts and Feedback Messages -->
+        <div class="auth-msg error" id="auth-error-msg" style="display:none;"></div>
+        <div class="auth-msg success" id="auth-success-msg" style="display:none;"></div>
+
+        <!-- ================= 1. SIGN IN FORM ================= -->
+        <div class="auth-panel" id="signin-panel">
+          <div class="auth-panel-header">
+            <h3 class="auth-form-title">Sign In</h3>
+            <p class="auth-form-subtitle">Access your CrimeIntel AI workspace</p>
+          </div>
+
+          <form id="login-form" novalidate>
+            <!-- User Role Dropdown (ONLY Citizen & Police Officer) -->
+            <div class="form-group">
+              <label class="form-label" for="login-role">User Role</label>
+              <div class="select-wrapper">
+                <select class="form-control form-select" id="login-role" required>
+                  <option value="" selected disabled>Select your role</option>
+                  <option value="Citizen">Citizen</option>
+                  <option value="Police Officer">Police Officer</option>
+                </select>
+                <div class="select-arrow">▾</div>
+              </div>
+            </div>
+
+            <!-- Dynamic Identifier Field (Phone Number for Citizen, Email Address for Police Officer) -->
+            <div class="form-group" id="login-identifier-group">
+              <label class="form-label" for="login-identifier" id="login-identifier-label">Identifier</label>
+              <div class="input-with-icon">
+                <span class="input-leading-icon" id="login-identifier-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                </span>
+                <input type="text" class="form-control" id="login-identifier" placeholder="Select your role first" autocomplete="username" required>
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+              <label class="form-label" for="login-password">Password</label>
+              <div class="input-with-icon">
+                <span class="input-leading-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </span>
+                <input type="password" class="form-control has-trailing" id="login-password" placeholder="Enter your password" autocomplete="current-password" required>
+                <button type="button" class="pwd-toggle-btn" data-toggle-password="login-password" title="Show password" aria-label="Toggle password visibility">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Remember me & Forgot password -->
+            <div class="form-aux-row">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="login-remember">
+                <span class="checkmark"></span>
+                <span class="checkbox-text">Remember me</span>
+              </label>
+              <a href="#" class="forgot-link" id="forgot-password-link">Forgot password?</a>
+            </div>
+
+            <!-- Sign In Submit Button -->
+            <button type="submit" class="auth-btn-primary" id="login-submit-btn">
+              <span>SIGN IN</span>
+            </button>
+
+            <!-- Switch to Registration -->
+            <div class="auth-switch-box">
+              <span>Don't have an account?</span>
+              <a href="#" class="switch-link" id="switch-to-register">Create Account</a>
+            </div>
+
+            <!-- Divider -->
+            <div class="auth-divider">
+              <span>OR</span>
+            </div>
+
+            <!-- Government SSO Button -->
+            <button type="button" class="auth-btn-sso" id="sso-login-btn">
+              <span class="sso-icon">🏛️</span>
+              <span>Continue with Government SSO</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- ================= 2. REGISTRATION FORM ================= -->
+        <div class="auth-panel" id="register-panel" style="display:none;">
+          <div class="auth-panel-header">
+            <h3 class="auth-form-title">Create Account</h3>
+            <p class="auth-form-subtitle">Register for CrimeIntel AI access</p>
+          </div>
+
+          <form id="register-form" novalidate>
+            <!-- User Role Dropdown (ONLY Citizen & Police Officer) -->
+            <div class="form-group">
+              <label class="form-label" for="reg-role">User Role</label>
+              <div class="select-wrapper">
+                <select class="form-control form-select" id="reg-role" required>
+                  <option value="" selected disabled>Select your role</option>
+                  <option value="Citizen">Citizen</option>
+                  <option value="Police Officer">Police Officer</option>
+                </select>
+                <div class="select-arrow">▾</div>
+              </div>
+            </div>
+
+            <!-- Initial state guidance when no role is selected -->
+            <div id="reg-role-prompt" style="padding: 14px 12px; border-radius: 8px; font-size: 12.5px; color: var(--ink-muted); text-align: center; border: 1px dashed var(--line); margin-bottom: 14px;">
+              Please select your role above to show registration fields.
+            </div>
+
+            <!-- Dynamic Role-Specific Registration Fields -->
+            <div id="reg-dynamic-fields" style="display:none;">
+              <!-- 1. Full Name -->
+              <div class="form-group" id="reg-name-group">
+                <label class="form-label" for="reg-name">Full Name</label>
+                <div class="input-with-icon">
+                  <span class="input-leading-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </span>
+                  <input type="text" class="form-control" id="reg-name" placeholder="Enter your full name" autocomplete="name" required>
+                </div>
+              </div>
+
+              <!-- 2. Phone Number -->
+              <div class="form-group" id="reg-phone-group">
+                <label class="form-label" for="reg-phone">Phone Number</label>
+                <div class="input-with-icon">
+                  <span class="input-leading-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                  </span>
+                  <input type="tel" class="form-control" id="reg-phone" placeholder="Enter your phone number" autocomplete="tel" required>
+                </div>
+              </div>
+
+              <!-- 3. Email Address (Police Officer ONLY - Hidden for Citizen) -->
+              <div class="form-group" id="reg-email-group" style="display:none;">
+                <label class="form-label" for="reg-email">Email Address</label>
+                <div class="input-with-icon">
+                  <span class="input-leading-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                      <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                  </span>
+                  <input type="email" class="form-control" id="reg-email" placeholder="Enter your official email address" autocomplete="email">
+                </div>
+              </div>
+
+              <!-- 4. Password -->
+              <div class="form-group" id="reg-password-group">
+                <label class="form-label" for="reg-password">Password</label>
+                <div class="input-with-icon">
+                  <span class="input-leading-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                  </span>
+                  <input type="password" class="form-control has-trailing" id="reg-password" placeholder="Create your password" autocomplete="new-password" required>
+                  <button type="button" class="pwd-toggle-btn" data-toggle-password="reg-password" title="Show password" aria-label="Toggle password visibility">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 5. Confirm Password -->
+              <div class="form-group" id="reg-confirm-password-group">
+                <label class="form-label" for="reg-confirm-password">Confirm Password</label>
+                <div class="input-with-icon">
+                  <span class="input-leading-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                  </span>
+                  <input type="password" class="form-control has-trailing" id="reg-confirm-password" placeholder="Confirm your password" autocomplete="new-password" required>
+                  <button type="button" class="pwd-toggle-btn" data-toggle-password="reg-confirm-password" title="Show password" aria-label="Toggle password visibility">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 6. Register Submit Button -->
+              <button type="submit" class="auth-btn-primary" id="reg-submit-btn">
+                <span>CREATE ACCOUNT</span>
+              </button>
+            </div>
+
+            <!-- Switch back to Sign In -->
+            <div class="auth-switch-box">
+              <span>Already have an account?</span>
+              <a href="#" class="switch-link" id="switch-to-signin">Sign In</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Institutional Footer -->
+    <div class="login-footer-info">
+      <strong>CrimeIntel AI — Criminal Intelligence &amp; Analysis System</strong>
+      Department of Computer Science &amp; Engineering · Demonstration &amp; Research Portal<br>
+      © 2026 CrimeIntel AI Platform · All rights reserved.
+    </div>
+  </div>
+</div>
+
+<!-- ========== MAIN APP (hidden until login) ========== -->
+<div class="app" id="app">
+  <div class="shell">
+    <nav class="sidenav raised" style="border-radius:0;box-shadow:none;background:var(--raised);">
+      <div class="brand">
+        <div class="mark raised-sm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4z" stroke="#3a5fe0" stroke-width="1.8"/>
+            <circle cx="12" cy="11" r="2.4" stroke="#3a5fe0" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="display">CrimeIntel AI</h1>
+          <div class="sub">Analytics &amp; Intelligence</div>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="dashboard">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+          <rect x="14" y="3" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+          <rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+          <rect x="3" y="16" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+        Dashboard
+      </div>
+      <div class="nav-item" data-nav="cases">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+        Cases
+      </div>
+      <div class="nav-item" data-nav="evidence">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M9 2h6l1 4H8l1-4z" stroke="currentColor" stroke-width="1.8"/>
+          <rect x="5" y="6" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+        Evidence Log
+      </div>
+      <div class="nav-item" data-nav="suspects">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+        Suspects
+        <span class="nav-badge" id="suspectNavBadge" style="display:none;">0</span>
+      </div>
+      <div class="nav-item" data-nav="reports">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M6 2h9l5 5v15H6V2z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M9 12h6M9 16h6M9 8h3" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        Reports
+      </div>
+      <div class="sidenav-footer mono">v2.4.0 · authorized session</div>
+    </nav>
+
+    <div class="main">
+      <header class="top raised">
+        <div class="search-wrap pressed" style="box-shadow:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="globalSearch" placeholder="Search cases, evidence, suspects, tags…">
+        </div>
+        <!-- Theme Toggle in Top Header -->
+        <div class="theme-toggle-control header-theme-toggle" id="headerThemeToggle" title="Toggle Light / Dark Theme">
+          <button type="button" class="theme-btn active" data-set-theme="light" onclick="window.setTheme('light')" aria-label="Light Theme">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <span>Light</span>
+          </button>
+          <button type="button" class="theme-btn" data-set-theme="dark" onclick="window.setTheme('dark')" aria-label="Dark Theme">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span>Dark</span>
+          </button>
+        </div>
+        <div class="clock">
+          <div class="t mono" id="clockTime">--:--:--</div>
+          <div id="clockDate">—</div>
+        </div>
+        <div class="analyst-chip-wrap" style="position:relative;">
+          <div class="analyst-chip raised-sm" id="analystChipContainer" onclick="event.stopPropagation(); if (window.toggleProfileDropdown) window.toggleProfileDropdown();" title="User Profile & Session" style="cursor:pointer;">
+            <div class="avatar" id="analystAvatar">AR</div>
+            <div style="font-size:12px;font-weight:600;" id="analystName">A. Reyes</div>
+          </div>
+          <!-- Profile Dropdown Menu -->
+          <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
+            <div class="pd-header">
+              <div class="pd-name" id="pdUserName">Officer R. Verma</div>
+              <div class="pd-role"><span class="badge open" id="pdUserRole" style="font-size:10.5px;">Police Officer</span></div>
+              <div class="pd-info" id="pdUserPhone"></div>
+              <div class="pd-info" id="pdUserEmail"></div>
+            </div>
+            <button type="button" class="pd-logout" onclick="window.handleLogout()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      </header>
+      <div id="view"></div>
+    </div>
+  </div>
+
+  <!-- Evidence Modal (Police) -->
+  <div class="overlay" id="evOverlay">
+    <div class="modal raised">
+      <h3>Log New Evidence</h3>
+      <div class="field" id="evCaseField">
+        <label>Case</label>
+        <select id="evCase"></select>
+      </div>
+      <div class="field">
+        <label>Type</label>
+        <select id="evType">
+          <option value="forensic">Forensic</option>
+          <option value="photo">Photograph / Scene Image</option>
+          <option value="witness">Witness Statement</option>
+          <option value="digital">Digital</option>
+          <option value="document">Document / PDF</option>
+          <option value="physical">Physical</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <textarea id="evText" rows="3" placeholder="e.g. Witness reports a grey van parked outside 9th &amp; Lake for ~40 min before the incident."></textarea>
+      </div>
+
+      <!-- Media Attachment & Camera Field Capture (Police Field Operations) -->
+      <div class="field" style="border-top:1px solid var(--line);padding-top:10px;margin-top:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+          <label style="margin:0;font-size:12px;font-weight:600;">Attach Evidence Photos / Media</label>
+          <div style="display:flex;gap:6px;">
+            <label class="btn ghost-sm" style="display:flex;align-items:center;gap:4px;cursor:pointer;margin:0;padding:4px 9px;font-size:11.5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              Upload Photo / File
+              <input type="file" id="evFileInput" multiple accept="image/*,application/pdf,.doc,.docx,.txt" style="display:none;">
+            </label>
+            <button type="button" class="btn ghost-sm" onclick="window.openCameraCaptureModal('police-evidence')" style="display:flex;align-items:center;gap:4px;padding:4px 9px;font-size:11.5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+              Take Photo
+            </button>
+          </div>
+        </div>
+        <div id="evPendingAttachmentsList" style="margin-top:6px;"></div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Location</label>
+          <input id="evLocation" placeholder="e.g. 9th &amp; Lake St">
+        </div>
+        <div class="field">
+          <label>Time</label>
+          <input id="evTime" placeholder="e.g. 23:40, June 14">
+        </div>
+      </div>
+      <div class="field">
+        <label>Tags (comma separated)</label>
+        <input id="evTags" placeholder="e.g. grey van, 9th st, night">
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="closeModal('evOverlay')">Cancel</button>
+        <button class="btn primary" id="saveEvBtn">Log Evidence</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suspect Modal (Police) -->
+  <div class="overlay" id="suOverlay">
+    <div class="modal raised">
+      <h3>Add Suspect / Person of Interest</h3>
+      <div class="field" id="suCaseField">
+        <label>Home Case</label>
+        <select id="suCase"></select>
+      </div>
+      <div class="field">
+        <label>Name</label>
+        <input id="suName" placeholder="e.g. Marcus Doyle">
+      </div>
+      <div class="field">
+        <label>Alias / Notes</label>
+        <input id="suAlias" placeholder="e.g. Known associate of victim">
+      </div>
+      <div class="field">
+        <label>Known Tags (comma separated — vehicles, places, aliases, habits)</label>
+        <textarea id="suTags" rows="2" placeholder="e.g. grey van, 9th st, night shift worker"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="closeModal('suOverlay')">Cancel</button>
+        <button class="btn primary" id="saveSuBtn">Add Suspect</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Case Modal (Police) -->
+  <div class="overlay" id="caseOverlay">
+    <div class="modal raised">
+      <h3>Open New Case</h3>
+      <div class="field">
+        <label>Case Title</label>
+        <input id="ncTitle" placeholder="e.g. Warehouse District Arson">
+      </div>
+      <div class="field">
+        <label>Summary</label>
+        <textarea id="ncDesc" rows="3" placeholder="Short case description…"></textarea>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Status</label>
+          <select id="ncStatus">
+            <option value="open">Open</option>
+            <option value="critical">Critical</option>
+            <option value="cold">Cold</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Opened Date</label>
+          <input id="ncDate" type="date">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="closeModal('caseOverlay')">Cancel</button>
+        <button class="btn primary" id="saveCaseBtn">Create Case</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CITIZEN: REPORT A COMPLAINT MODAL ========== -->
+  <div class="overlay" id="citizenComplaintModal">
+    <div class="modal modal-wide raised">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="margin:0;">Report a Public Complaint / Grievance</h3>
+        <button type="button" onclick="closeModal('citizenComplaintModal')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink-faint);">✕</button>
+      </div>
+      <form id="citizenComplaintForm">
+        <div class="field">
+          <label>Complaint Title *</label>
+          <input type="text" id="compTitle" placeholder="e.g. Theft of Gold Chain near Dharampeth Market" required>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>Category *</label>
+            <select id="compCategory" required>
+              <option value="Theft">Theft</option>
+              <option value="Vehicle Theft">Vehicle Theft</option>
+              <option value="Robbery">Robbery</option>
+              <option value="Fraud">Financial Fraud / Cheating</option>
+              <option value="Cybercrime">Cybercrime</option>
+              <option value="Assault">Physical Assault</option>
+              <option value="Burglary">House Break-in / Burglary</option>
+              <option value="Chain Snatching">Chain / Mobile Snatching</option>
+              <option value="Harassment">Harassment</option>
+              <option value="Missing Person">Missing Person</option>
+              <option value="Other">Other Criminal Offense</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Incident Date *</label>
+            <input type="date" id="compIncidentDate" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Incident Location *</label>
+          <input type="text" id="compLocation" placeholder="e.g. Dharampeth Main Road, Ambazari, Sitabuldi, Nagpur" required autocomplete="off">
+          <div style="font-size:11px;color:var(--ink-faint);margin-top:4px;">Enter a Nagpur area (Ambazari, Sitabuldi, Sadar, Bajaj Nagar, Dhantoli, Sonegaon) to auto-assign the local police station.</div>
+          <div id="assignedPoliceStationCard" class="assigned-station-host" aria-live="polite"></div>
+        </div>
+
+        <!-- Description with Speech-to-Text -->
+        <div class="field">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <label style="margin:0;">Complaint Statement / Description *</label>
+            <button type="button" class="btn ghost-sm" id="btnSpeechMic" style="display:flex;align-items:center;gap:5px;padding:3px 8px;font-size:11px;" title="Speak clearly into your microphone">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+              Voice Input
+            </button>
+          </div>
+          <div id="speechStatusIndicator" style="display:none;font-size:11px;margin-bottom:4px;"></div>
+          <textarea id="compDescription" rows="4" placeholder="Provide complete facts of the incident, sequence of events, losses, and observations. (You can type or click 'Voice Input' to dictate.)" required></textarea>
+        </div>
+
+        <!-- Evidence Attachment & Camera -->
+        <div class="field" style="border-top:1px solid var(--line);padding-top:12px;margin-top:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <label style="margin:0;">Evidence Attachments (Optional)</label>
+            <div style="display:flex;gap:6px;">
+              <label class="btn ghost-sm" style="display:flex;align-items:center;gap:4px;cursor:pointer;margin:0;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Upload Files
+                <input type="file" id="compFileInput" multiple accept="image/*,application/pdf,.doc,.docx,.txt" style="display:none;">
+              </label>
+              <button type="button" class="btn ghost-sm" onclick="window.openCameraCaptureModal('complaint')" style="display:flex;align-items:center;gap:4px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+                Take Photo
+              </button>
+            </div>
+          </div>
+          <div id="pendingAttachmentsList" style="margin-top:6px;"></div>
+        </div>
+
+        <!-- Suspect Details Section (Optional) -->
+        <details style="margin-top:10px;background:var(--surface-secondary);padding:10px;border-radius:8px;border:1px solid var(--line);">
+          <summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);">+ Suspect / Perpetrator Information (Optional)</summary>
+          <div style="margin-top:10px;">
+            <div class="row-2">
+              <div class="field">
+                <label>Suspect Name / Alias</label>
+                <input type="text" id="compSuspectName" placeholder="e.g. Unknown or known person">
+              </div>
+              <div class="row-2">
+                <div class="field">
+                  <label>Approx Age</label>
+                  <input type="text" id="compSuspectAge" placeholder="e.g. 25-30">
+                </div>
+                <div class="field">
+                  <label>Gender</label>
+                  <select id="compSuspectGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Unknown">Unknown</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label>Identifying Marks / Physical Description</label>
+              <input type="text" id="compSuspectDesc" placeholder="e.g. Medium height, black jacket, tattoo on right wrist">
+            </div>
+          </div>
+        </details>
+
+        <div class="modal-actions" style="margin-top:16px;">
+          <button type="button" class="btn ghost" onclick="closeModal('citizenComplaintModal')">Cancel</button>
+          <button type="submit" class="btn primary" id="btnSubmitComplaint">Submit Complaint</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== CAMERA CAPTURE MODAL ========== -->
+  <div class="overlay" id="cameraCaptureModal">
+    <div class="modal raised" style="width:520px;max-width:94vw;">
+      <h3>Capture Photograph / Evidence</h3>
+      <div style="background:#000;border-radius:10px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;min-height:280px;">
+        <video id="cameraVideoFeed" autoplay playsinline style="width:100%;max-height:360px;object-fit:cover;"></video>
+        <canvas id="cameraCanvas" style="display:none;"></canvas>
+        <div id="cameraPreviewBox" style="display:none;width:100%;">
+          <img id="cameraPreviewImg" alt="Snapshot" style="width:100%;max-height:360px;object-fit:contain;" />
+        </div>
+      </div>
+      <div class="modal-actions" style="justify-content:space-between;margin-top:14px;">
+        <button type="button" class="btn ghost" onclick="window.closeCameraModal()">Cancel</button>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn primary" id="btnCaptureSnap">📸 Take Snapshot</button>
+          <button type="button" class="btn ghost" id="btnRetakeSnap" style="display:none;">Retake</button>
+          <button type="button" class="btn primary" id="btnAttachSnap" style="display:none;">Attach Photograph</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CITIZEN COMPLAINT SUCCESS CONFIRMATION MODAL ========== -->
+  <div class="overlay" id="complaintSuccessModal">
+    <div class="modal raised" style="text-align:center;width:420px;">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 12px auto;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h3 style="margin-bottom:6px;">Complaint Registered Successfully</h3>
+      <p style="font-size:12.5px;color:var(--ink-muted);margin:0 0 16px 0;">
+        Your grievance has been logged into the police record system and assigned for verification.
+      </p>
+
+      <div style="background:var(--surface-secondary);padding:14px;border-radius:10px;border:1px solid var(--line);text-align:left;font-size:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="color:var(--ink-faint);">Application ID:</span>
+          <strong class="mono" id="successAppId" style="color:var(--primary);font-size:13px;">CI-2026-0001</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="color:var(--ink-faint);">Submission Date:</span>
+          <span id="successAppDate">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:var(--ink-faint);">Initial Status:</span>
+          <span class="badge open" id="successAppStatus">Submitted</span>
+        </div>
+      </div>
+      <div id="successAssignedStation" class="assigned-station-host" style="text-align:left;margin-top:12px;"></div>
+
+      <div class="modal-actions" style="justify-content:center;gap:10px;margin-top:18px;">
+        <button type="button" class="btn ghost" onclick="closeModal('complaintSuccessModal'); window.go('dashboard');">Dashboard</button>
+        <button type="button" class="btn primary" onclick="closeModal('complaintSuccessModal'); window.go('tracking/' + document.getElementById('successAppId').textContent);">Track Application</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== POLICE REVIEW CITIZEN COMPLAINT MODAL ========== -->
+  <div class="overlay" id="policeReviewModal">
+    <div class="modal modal-wide raised">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;">Review Citizen Complaint &amp; Update Status</h3>
+        <button type="button" onclick="closeModal('policeReviewModal')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink-faint);">✕</button>
+      </div>
+      <div id="policeReviewModalBody"></div>
+    </div>
+  </div>
+
+  <!-- ========== POLICE EDIT / ADD LEGAL PROVISION MODAL ========== -->
+  <div class="overlay" id="editLegalProvisionModal">
+    <div class="modal raised" style="width:540px;max-width:94vw;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;">Advisory Legal Provision Review</h3>
+        <button type="button" onclick="closeModal('editLegalProvisionModal')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink-faint);">✕</button>
+      </div>
+      <form id="editLegalProvisionForm" onsubmit="window.saveModifiedLegalProvision(event)">
+        <input type="hidden" id="editLpAppId">
+        <input type="hidden" id="editLpProvisionId">
+        <div class="field">
+          <label>Statutory Act *</label>
+          <select id="editLpAct" required>
+            <option value="Bharatiya Nyaya Sanhita, 2023">Bharatiya Nyaya Sanhita, 2023 (BNS 2023)</option>
+            <option value="Information Technology Act, 2000">Information Technology Act, 2000 (IT Act)</option>
+            <option value="Protection of Children from Sexual Offences Act, 2012">Protection of Children from Sexual Offences Act, 2012 (POCSO)</option>
+            <option value="Motor Vehicles Act, 1988">Motor Vehicles Act, 1988</option>
+            <option value="Arms Act, 1959">Arms Act, 1959</option>
+          </select>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>Section Number / Code *</label>
+            <input type="text" id="editLpSection" placeholder="e.g. Section 303(2) or Section 331" required>
+          </div>
+          <div class="field">
+            <label>Relevance Assessment *</label>
+            <select id="editLpRelevance" required>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Reason / Offence Grounding *</label>
+          <textarea id="editLpReason" rows="3" placeholder="Factual reason explaining why this provision applies to the complaint facts..." required></textarea>
+        </div>
+        <div class="field">
+          <label>Officer Notes / Remarks</label>
+          <input type="text" id="editLpRemarks" placeholder="e.g. Corroborated by CCTV evidence and preliminary inspection.">
+        </div>
+        <div style="font-size:11.5px;color:var(--ink-faint);margin-bottom:14px;line-height:1.4;">
+          ⚠️ <strong>Advisory Notice:</strong> This is a decision-support advisory entry. Final legal classification and FIR registration shall be determined by the authorized police authority.
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" onclick="closeModal('editLegalProvisionModal')">Cancel</button>
+          <button type="submit" class="btn primary">Save Legal Provision</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== COMPLAINT ASSESSMENT REPORT PDF PREVIEW MODAL ========== -->
+  <div class="overlay" id="complaintAssessmentPdfModal">
+    <div class="modal modal-wide raised" style="max-width:900px;width:95vw;max-height:92vh;display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid var(--line);padding-bottom:10px;flex-wrap:wrap;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <h3 style="margin:0;font-size:16px;color:var(--ink);">Complaint Assessment Report</h3>
+          <span class="badge closed" style="font-size:10px;padding:2px 7px;">FOR POLICE REVIEW ONLY</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button type="button" class="btn primary" id="btnDownloadPdfDoc" style="display:inline-flex;align-items:center;gap:6px;background:var(--primary);font-weight:600;">
+            🖨 Print / Save as PDF
+          </button>
+          <button type="button" class="btn ghost" id="btnDownloadHtmlDoc" style="display:inline-flex;align-items:center;gap:6px;">
+            📥 Download Report File
+          </button>
+          <button type="button" onclick="closeModal('complaintAssessmentPdfModal')" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink-faint);margin-left:6px;">✕</button>
+        </div>
+      </div>
+      <div id="complaintAssessmentPdfModalBody" style="overflow-y:auto;flex:1;background:#ffffff;color:#000000;padding:20px;border-radius:6px;border:1px solid #d1d5db;font-family:Arial, Helvetica, sans-serif;"></div>
+    </div>
+  </div>
+
+  <!-- ========== EVIDENCE PREVIEW MODAL ========== -->
+  <div class="overlay" id="evidencePreviewModal">
+    <div class="modal raised" style="width:580px;max-width:94vw;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 id="previewModalTitle" style="margin:0;">Evidence File</h3>
+        <button type="button" onclick="closeModal('evidencePreviewModal')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink-faint);">✕</button>
+      </div>
+      <div id="previewModalBody"></div>
+      <div class="modal-actions" id="previewModalActions" style="margin-top:14px;display:flex;justify-content:flex-end;align-items:center;gap:10px;">
+        <button type="button" class="btn primary" onclick="closeModal('evidencePreviewModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CITIZEN QUICK UPLOAD EVIDENCE MODAL ========== -->
+  <div class="overlay" id="citizenUploadEvModal">
+    <div class="modal raised">
+      <h3>Upload Evidence Attachment</h3>
+      <div class="field">
+        <label>Select Your Complaint</label>
+        <select id="citizenEvAppSelect"></select>
+      </div>
+      <div class="field">
+        <label>Evidence Title / Description</label>
+        <input type="text" id="citizenEvNameInput" placeholder="e.g. CCTV recording clip / Bill invoice">
+      </div>
+      <div class="field">
+        <label>Select File</label>
+        <input type="file" id="citizenEvDirectFileInput" accept="image/*,application/pdf,.doc,.docx,.txt">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" onclick="closeModal('citizenUploadEvModal')">Cancel</button>
+        <button type="button" class="btn primary" onclick="
+          const fileInput = document.getElementById('citizenEvDirectFileInput');
+          const file = fileInput ? fileInput.files[0] : null;
+          const nameInput = document.getElementById('citizenEvNameInput');
+          const name = (nameInput ? nameInput.value.trim() : '') || (file ? file.name : 'Evidence File');
+          const appId = document.getElementById('citizenEvAppSelect') ? document.getElementById('citizenEvAppSelect').value : '';
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              import('./data.js').then(d => {
+                d.addCitizenEvidenceItem({
+                  applicationId: appId,
+                  name: name,
+                  type: file.type.startsWith('image/') ? 'photo' : 'document',
+                  fileSize: file.size,
+                  dataUrl: e.target.result,
+                  previewUrl: file.type.startsWith('image/') ? e.target.result : null
+                }).then(() => {
+                  if (fileInput) fileInput.value = '';
+                  if (nameInput) nameInput.value = '';
+                  window.closeModal('citizenUploadEvModal');
+                  window.showToast('Evidence uploaded successfully.');
+                  if (window.render) window.render();
+                });
+              });
+            };
+            reader.readAsDataURL(file);
+          } else {
+            window.showToast('Please select a file.');
+          }
+        ">Upload</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CITIZEN ADD SUSPECT MODAL ========== -->
+  <div class="overlay" id="citizenAddSuspectModal">
+    <div class="modal raised">
+      <h3>Add Suspect Information</h3>
+      <div class="field">
+        <label>Select Related Complaint</label>
+        <select id="citizenSusAppSelect"></select>
+      </div>
+      <div class="field">
+        <label>Suspect Name / Alias</label>
+        <input type="text" id="citizenSusName" placeholder="e.g. Unknown Subject">
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Approx Age</label>
+          <input type="text" id="citizenSusAge" placeholder="e.g. ~28">
+        </div>
+        <div class="field">
+          <label>Gender</label>
+          <select id="citizenSusGender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Physical Description &amp; Details</label>
+        <textarea id="citizenSusDesc" rows="3" placeholder="Clothing, height, tattoo, dialect, vehicle used..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" onclick="closeModal('citizenAddSuspectModal')">Cancel</button>
+        <button type="button" class="btn primary" onclick="
+          const name = document.getElementById('citizenSusName').value.trim() || 'Unknown Subject';
+          const age = document.getElementById('citizenSusAge').value.trim();
+          const gender = document.getElementById('citizenSusGender').value;
+          const desc = document.getElementById('citizenSusDesc').value.trim();
+          const appId = document.getElementById('citizenSusAppSelect').value;
+          import('./data.js').then(d => {
+            d.addCitizenSuspectItem({
+              applicationId: appId,
+              name,
+              age,
+              gender,
+              description: desc
+            }).then(() => {
+              window.closeModal('citizenAddSuspectModal');
+              window.showToast('Suspect details submitted.');
+              if (window.render) window.render();
+            });
+          });
+        ">Submit Suspect Info</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SWITCH OFFICER PROFILE PASSWORD MODAL ========== -->
+  <div class="overlay" id="switchProfileModal">
+    <div class="modal raised" style="width:420px;max-width:92vw;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;">Switch Profile</h3>
+        <button type="button" onclick="closeModal('switchProfileModal')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink-faint);">✕</button>
+      </div>
+      <form id="switchProfileForm" onsubmit="window.handleSwitchProfileSubmit(event)">
+        <input type="hidden" id="switchTargetOfficerId" value="">
+        
+        <div style="background:var(--surface-secondary);padding:10px 12px;border-radius:8px;margin-bottom:14px;border:1px solid var(--line);">
+          <div style="font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.04em;font-weight:600;">Target Profile</div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);" id="switchTargetOfficerName">Officer Name</div>
+          <div style="font-size:12px;color:var(--ink-muted);" id="switchTargetOfficerEmail">officer@police.gov.in</div>
+        </div>
+
+        <div id="switchProfileError" style="display:none;padding:8px 10px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:var(--critical);border-radius:6px;font-size:12px;margin-bottom:12px;"></div>
+
+        <div class="field">
+          <label for="switchProfilePassword">Password Required</label>
+          <div class="input-with-icon" style="position:relative;">
+            <input type="password" id="switchProfilePassword" class="form-control" placeholder="Enter password to verify & switch" autocomplete="current-password" required style="padding-right:38px;">
+            <button type="button" class="pwd-toggle-btn" data-toggle-password="switchProfilePassword" title="Show password" aria-label="Toggle password visibility" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--ink-faint);display:flex;align-items:center;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top:16px;">
+          <button type="button" class="btn ghost" onclick="closeModal('switchProfileModal')">Cancel</button>
+          <button type="submit" class="btn primary" id="btnConfirmSwitchProfile">Verify &amp; Switch Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== IN-APP ADD / SWITCH ACCOUNT MODAL ========== -->
+  <div class="overlay" id="addAccountModal">
+    <div class="modal raised" style="width:460px;max-width:94vw;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="margin:0;" id="addAccountModalTitle">Add Account Profile</h3>
+        <button type="button" onclick="closeModal('addAccountModal')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink-faint);">✕</button>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div style="display:flex;gap:6px;background:var(--surface-secondary);padding:4px;border-radius:8px;margin-bottom:14px;border:1px solid var(--line);">
+        <button type="button" id="tabAddAccCreate" onclick="window.switchAddAccountTab('create')" style="flex:1;padding:6px 12px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;background:var(--raised);color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,0.08);">Create New Account</button>
+        <button type="button" id="tabAddAccSignin" onclick="window.switchAddAccountTab('signin')" style="flex:1;padding:6px 12px;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;background:transparent;color:var(--ink-muted);">Sign In Existing</button>
+      </div>
+
+      <div id="addAccountError" style="display:none;padding:8px 10px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:var(--critical);border-radius:6px;font-size:12px;margin-bottom:12px;"></div>
+
+      <!-- CREATE ACCOUNT FORM -->
+      <form id="formAddAccCreate" onsubmit="window.handleAddAccountCreate(event)">
+        <div class="field">
+          <label for="addAccRole">Account Role</label>
+          <select id="addAccRole" onchange="window.updateAddAccRoleFields(this.value)" style="width:100%;">
+            <option value="Police Officer">Police Officer</option>
+            <option value="Citizen">Citizen User</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="addAccFullName">Full Legal Name</label>
+          <input type="text" id="addAccFullName" placeholder="e.g. Officer Vikram Singh" required>
+        </div>
+
+        <div class="field" id="addAccEmailField">
+          <label for="addAccEmail">Official Police Email</label>
+          <input type="email" id="addAccEmail" placeholder="officer@police.gov.in">
+        </div>
+
+        <div class="field">
+          <label for="addAccPhone">Phone Number</label>
+          <input type="tel" id="addAccPhone" placeholder="10-digit mobile number" required>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="field">
+            <label for="addAccPassword">Password</label>
+            <input type="password" id="addAccPassword" placeholder="Min. 6 chars" required autocomplete="new-password">
+          </div>
+          <div class="field">
+            <label for="addAccConfirmPassword">Confirm Password</label>
+            <input type="password" id="addAccConfirmPassword" placeholder="Re-enter password" required autocomplete="new-password">
+          </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top:16px;">
+          <button type="button" class="btn ghost" onclick="closeModal('addAccountModal')">Cancel</button>
+          <button type="submit" class="btn primary" id="btnAddAccCreateSubmit">Create &amp; Switch Account</button>
+        </div>
+      </form>
+
+      <!-- SIGN IN EXISTING ACCOUNT FORM -->
+      <form id="formAddAccSignin" style="display:none;" onsubmit="window.handleAddAccountSignin(event)">
+        <div class="field">
+          <label for="addAccSigninRole">Account Role</label>
+          <select id="addAccSigninRole" onchange="window.updateAddAccSigninFields(this.value)" style="width:100%;">
+            <option value="Police Officer">Police Officer</option>
+            <option value="Citizen">Citizen User</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="addAccSigninIdent" id="addAccSigninIdentLabel">Official Email Address</label>
+          <input type="text" id="addAccSigninIdent" placeholder="officer@police.gov.in" required>
+        </div>
+
+        <div class="field">
+          <label for="addAccSigninPassword">Account Password</label>
+          <input type="password" id="addAccSigninPassword" placeholder="Enter account password" required autocomplete="current-password">
+        </div>
+
+        <div class="modal-actions" style="margin-top:16px;">
+          <button type="button" class="btn ghost" onclick="closeModal('addAccountModal')">Cancel</button>
+          <button type="submit" class="btn primary" id="btnAddAccSigninSubmit">Sign In &amp; Switch Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

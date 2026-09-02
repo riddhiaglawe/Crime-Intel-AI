@@ -1,0 +1,6 @@
+{
+  "name": "CrimeIntel AI",
+  "description": "AI-Powered Criminal Intelligence & Analysis — Evidence Correlation, Case Analysis and Suspect Detection System",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
