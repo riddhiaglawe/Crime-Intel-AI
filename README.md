@@ -1,6 +1,6 @@
 # 🛡️ CrimeIntel AI
 
-### AI-Powered Criminal Intelligence & Analysis System
+### AI-Powered Criminal Analysis, Evidence Correlation, And Possible Suspect Detection System 
 
 CrimeIntel AI is a web-based **criminal intelligence and case analysis platform** designed to help law-enforcement teams organize cases, analyze evidence, identify suspect correlations, and discover relationships across multiple investigations.
 
